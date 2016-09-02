@@ -49,6 +49,24 @@ public class WebDriverUtil {
     }
 
     /**
+     * Wait for page with angular to be loaded.
+     */
+    public static void waitForAngularPageLoaded() {
+        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                boolean waitCondition = Boolean.valueOf(executeJavaScript(
+                    "return angular.element(document).injector().get('$http').pendingRequests.length === 0")
+                        .toString());
+                return waitCondition;
+            }
+        };
+
+        Wait<WebDriver> wait =
+            new WebDriverWait(WebDriverInstance.getDriver(), 30);
+        wait.until(expectation);
+    }
+
+    /**
      * Open a new browser window, and visit the URL provided parameter.
      * @param url
      */
