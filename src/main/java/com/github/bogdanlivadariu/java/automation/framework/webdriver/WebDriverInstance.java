@@ -15,7 +15,7 @@ public class WebDriverInstance {
 
     /**
      * Call this method to get the driver instance.
-     * @return {@link WebDriver} instance.
+     * @return {@link WebDriver}
      */
     public static WebDriver getDriver() {
         if (driver == null) {
@@ -29,7 +29,7 @@ public class WebDriverInstance {
 
     /**
      * Use this method to set the driver instance.
-     * @param {@link WebDriver} driver.
+     * @param driver {@link WebDriver}
      */
     public static void setDriver(WebDriver driver) {
         WebDriverInstance.driver = driver;

@@ -15,8 +15,8 @@ public class WebDriverUtil {
 
     /**
      * Execute js / jquery.
-     * @param script
-     * @return
+     * @param script {@link String}
+     * @return {@link Object}
      */
     public static Object executeJavaScript(String script) {
         JavascriptExecutor jsExecute = (JavascriptExecutor) WebDriverInstance.getDriver();
@@ -25,9 +25,9 @@ public class WebDriverUtil {
 
     /**
      * Execute js / jquery.
-     * @param script
-     * @param element
-     * @return
+     * @param script {@link String}
+     * @param element {@link WebElement}
+     * @return {@link Object}
      */
     public static Object executeJavaScript(String script, WebElement element) {
         JavascriptExecutor jsExecute = (JavascriptExecutor) WebDriverInstance.getDriver();
@@ -68,7 +68,7 @@ public class WebDriverUtil {
 
     /**
      * Open a new browser window, and visit the URL provided parameter.
-     * @param url
+     * @param url {@link String}
      */
     public static void openURL(String url) {
         logger.info("Opening URL: " + url);
