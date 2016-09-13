@@ -17,7 +17,7 @@ public interface Clickable {
 
     /**
      * In case the action redirects you to a new page, this method can be override to return the redirected page.
-     * @return
+     * @return {@link Object}
      * @throws Exception
      */
     Object getLandingPage() throws Exception;

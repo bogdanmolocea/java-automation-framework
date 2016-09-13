@@ -32,7 +32,7 @@ public class BaseComponent {
 
     /**
      * Constructor of BaseComponentClass.
-     * @param element
+     * @param element {@link WebElement}
      */
     public BaseComponent(WebElement element) {
         this.baseWebElement = element;
@@ -40,8 +40,8 @@ public class BaseComponent {
 
     /**
      * Constructor of BaseComponentClass.
-     * @param element
-     * @param locator
+     * @param element {@link WebElement}
+     * @param locator {@link By}
      */
     public BaseComponent(WebElement element, By locator) {
         this.baseWebElement = getDescendant(element, locator);
@@ -49,9 +49,8 @@ public class BaseComponent {
 
     /**
      * Searches for a Descendant.
-     * @param descendantLocator
-     *            {@link By}
-     * @return
+     * @param descendantLocator {@link By}
+     * @return {@link WebElement}
      */
     public WebElement getDescendant(final By descendantLocator) {
         WebElement descendantFound = null;
@@ -69,9 +68,8 @@ public class BaseComponent {
 
     /**
      * Searches for all Descendants.
-     * @param descendantsLocator
-     *            {@link By}
-     * @return
+     * @param descendantsLocator {@link By}
+     * @return {@link List} of {@link WebElement}
      */
     public List<WebElement> getDescendants(final By descendantsLocator) {
         List<WebElement> descendantsFound = null;
@@ -89,9 +87,9 @@ public class BaseComponent {
 
     /**
      * Searches for a Descendant in the provided parent.
-     * @param descendantLocator
-     *            {@link By}
-     * @return
+     * @param parent {@link WebElement}
+     * @param descendantLocator {@link By}
+     * @return {@link WebElement}
      */
     public WebElement getDescendant(final WebElement parent, final By descendantLocator) {
         WebElement descendantFound = null;
@@ -109,8 +107,8 @@ public class BaseComponent {
 
     /**
      * Extracts the value of an attribute.
-     * @param attributeName
-     * @return
+     * @param attributeName {@link String}
+     * @return {@link String} representing the value of the the attributeName
      */
     public String getAttributeValue(String attributeName) {
         baseWebElement = getFluentWait().until(ExpectedConditions.visibilityOf(baseWebElement));
@@ -121,7 +119,7 @@ public class BaseComponent {
 
     /**
      * Returns the text of the webElement.
-     * @return
+     * @return {@link String}
      */
     public String getText() {
         String returnedText;
@@ -139,7 +137,7 @@ public class BaseComponent {
 
     /**
      * Checks if the webElement is displayed.
-     * @return
+     * @return {@link Boolean}
      */
     public boolean isDisplayed() {
         boolean found;
@@ -156,7 +154,7 @@ public class BaseComponent {
 
     /**
      * This method returns the enabled state of a WebElement.
-     * @return true or false
+     * @return {@link Boolean}
      */
     public Boolean isEnabled() {
         baseWebElement = waitForElement(ExpectedConditions.visibilityOf(baseWebElement));
@@ -167,7 +165,7 @@ public class BaseComponent {
 
     /**
      * Send keys to the WebElement.
-     * @param keys
+     * @param keys {@link Keys}
      */
     public void sendKeys(Keys keys) {
         // delay();
@@ -179,7 +177,7 @@ public class BaseComponent {
 
     /**
      * Send text to the WebElement.
-     * @param text
+     * @param text {@link String}
      */
     public void sendKeys(String text) {
         // delay();
@@ -191,7 +189,7 @@ public class BaseComponent {
 
     /**
      * Get the parent of the current WebElement.
-     * @return
+     * @return {@link WebElement}
      */
     public WebElement getParent() {
         return getDescendant(By.xpath(".."));
@@ -199,7 +197,7 @@ public class BaseComponent {
 
     /**
      * Get the current instance of the WebElement.
-     * @return
+     * @return {@link WebElement}
      */
     public WebElement getCurrentWebElement() {
         return baseWebElement;
@@ -207,8 +205,8 @@ public class BaseComponent {
 
     /**
      * Wait for the webElement to be visible given an expected condition.
-     * @param cond
-     * @return
+     * @param cond {@link ExpectedCondition}
+     * @return {@link WebElement}
      */
     public WebElement waitForElement(ExpectedCondition< ? > cond) {
         return (WebElement) getFluentWait().until(cond);
@@ -231,7 +229,8 @@ public class BaseComponent {
 
     /**
      * Extracts the locator used to identify the webElement in the DOM.
-     * @return
+     * @param element {@link WebElement}
+     * @return {@link String}
      */
     protected String getLocatorForWebElement(WebElement element) {
         if (element == null) {
@@ -242,7 +241,7 @@ public class BaseComponent {
 
     /**
      * Extracts the locator used to identify the webElement in the DOM.
-     * @return
+     * @return {@link String}
      */
     protected String getLocatorForWebElement() {
         if (baseWebElement == null) {
@@ -259,12 +258,36 @@ public class BaseComponent {
         return locator;
     }
 
+    /**
+     * Scrolls the component into view on top of the page.
+     */
     public void scrollIntoView() {
-        ((JavascriptExecutor) WebDriverInstance.getDriver()).executeScript("return arguments[0].scrollIntoView(true);",
-            getCurrentWebElement());
+        scrollIntoView(true);
     }
 
-    public void clickText(String text) {
-        baseWebElement.findElement(By.xpath(".//*[text()='" + text + "']")).click();
+    /**
+     * Scroll component into view based on the param.
+     * @param scrollTop true to scroll element on top of the page, false to scroll it on the bottom of the page
+     */
+    public void scrollIntoView(boolean scrollTop) {
+        String script = String.format("return arguments[0].scrollIntoView(%s);", scrollTop);
+        ((JavascriptExecutor) WebDriverInstance.getDriver()).executeScript(script, getCurrentWebElement());
+    }
+
+    /**
+     * Checks if the element is present in the DOM
+     * @return true if element is present in the DOM, false otherwise
+     */
+    public Boolean isPresent() {
+        try {
+            if (baseWebElement.isDisplayed()) {
+                return true;
+            } else if (baseWebElement.getSize().getHeight() > 0 && baseWebElement.getSize().getWidth() > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 }
