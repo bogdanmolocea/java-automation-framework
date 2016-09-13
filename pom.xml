@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.bogdanlivadariu</groupId>
   <artifactId>java-automation-framework</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <url>https://github.com/web-innovate/java-automation-framework</url>
   <name>Java automation framework</name>
   <description>A simple java automation components collection, that are in plan to be extended</description>

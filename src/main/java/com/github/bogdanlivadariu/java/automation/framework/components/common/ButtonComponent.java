@@ -55,4 +55,12 @@ public class ButtonComponent extends BaseComponent implements Clickable {
         logger.info("Double click on " + locator);
         action.doubleClick(baseWebElement).perform();
     }
+
+    /**
+     * Searches first element that matches the text provided as param, and clicks it;
+     * @param text
+     */
+    public void clickText(String text) {
+        baseWebElement.findElement(By.xpath(".//*[text()='" + text + "']")).click();
+    }
 }

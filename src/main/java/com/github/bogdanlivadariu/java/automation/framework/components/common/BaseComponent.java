@@ -258,12 +258,36 @@ public class BaseComponent {
         return locator;
     }
 
+    /**
+     * Scrolls the component into view on top of the page.
+     */
     public void scrollIntoView() {
-        ((JavascriptExecutor) WebDriverInstance.getDriver()).executeScript("return arguments[0].scrollIntoView(true);",
-            getCurrentWebElement());
+        scrollIntoView(true);
     }
 
-    public void clickText(String text) {
-        baseWebElement.findElement(By.xpath(".//*[text()='" + text + "']")).click();
+    /**
+     * Scroll component into view based on the param.
+     * @param scrollTop true to scroll element on top of the page, false to scroll it on the bottom of the page
+     */
+    public void scrollIntoView(boolean scrollTop) {
+        String script = String.format("return arguments[0].scrollIntoView(%s);", scrollTop);
+        ((JavascriptExecutor) WebDriverInstance.getDriver()).executeScript(script, getCurrentWebElement());
+    }
+
+    /**
+     * Checks if the element is present in the DOM
+     * @return true if element is present in the DOM, false otherwise
+     */
+    public Boolean isPresent() {
+        try {
+            if (baseWebElement.isDisplayed()) {
+                return true;
+            } else if (baseWebElement.getSize().getHeight() > 0 && baseWebElement.getSize().getWidth() > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 }
