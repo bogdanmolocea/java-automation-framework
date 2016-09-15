@@ -11,20 +11,37 @@ public class WebDriverInstance {
 
     private static Logger logger = LogManager.getLogger(WebDriverInstance.class);
 
-    private static WebDriver driver = null;
+    private static WebDriverInstance instance = new WebDriverInstance();
+
+    /* thread local driver object for webdriver */
+    ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>() {
+        @Override
+        protected WebDriver initialValue() {
+            return null;
+        }
+
+    };
+
+    /* Do-nothing..Do not allow to initialize this class from outside */
+    private WebDriverInstance() {
+    }
+
+    private static WebDriverInstance getInstance() {
+        return instance;
+    }
 
     /**
      * Call this method to get the driver instance.
      * @return {@link WebDriver}
      */
     public static WebDriver getDriver() {
-        if (driver == null) {
+        if (getInstance() == null) {
             logger.error("WebDriver instance has not been set, "
                 + "make sure you use the setter right after the driver is initialized");
             throw new NullPointerException("Webdriver instance is null, make sure you "
                 + "use the setter right after the driver instance is created.");
         }
-        return driver;
+        return getInstance().driver.get();
     }
 
     /**
@@ -32,7 +49,7 @@ public class WebDriverInstance {
      * @param driver {@link WebDriver}
      */
     public static void setDriver(WebDriver driver) {
-        WebDriverInstance.driver = driver;
+        getInstance().driver.set(driver);
         logger.info("WebDriver instance has been set.");
     }
 }
