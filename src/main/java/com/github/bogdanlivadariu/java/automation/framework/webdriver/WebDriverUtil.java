@@ -69,8 +69,9 @@ public class WebDriverUtil {
     /**
      * Open a new browser window, and visit the URL provided parameter.
      * @param url {@link String}
+     * @return the content of the opened URL
      */
-    public static void openURL(String url) {
+    public static String openURL(String url) {
         logger.info("Opening URL: " + url);
         WebDriver webDriverInstance = WebDriverInstance.getDriver();
 
@@ -88,10 +89,13 @@ public class WebDriverUtil {
         // switch to the new window
         webDriverInstance.switchTo().window(newWindowHandle);
         webDriverInstance.get(url);
+        String content = webDriverInstance.getPageSource();
         webDriverInstance.close();
 
         // switch back to the default window
         webDriverInstance.switchTo().window(currentHandle);
+
+        return content;
     }
 
     public static void switchToFrame(WebElement frameWebElement) {
